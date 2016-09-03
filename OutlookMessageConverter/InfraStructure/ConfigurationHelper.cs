@@ -22,5 +22,31 @@ namespace OutlookMessageConverter.InfraStructure
                 Settings.Default.Save();
             }
         }
+
+        public static bool DrawSeparatorLine
+        {
+            get
+            {
+                return Settings.Default.DrawSeparatorLine;
+            }
+            set
+            {
+                Settings.Default.DrawSeparatorLine = value;
+                Settings.Default.Save();
+            }
+        }
+
+        public static bool ConfirmDelete
+        {
+            get
+            {
+                return Settings.Default.ConfirmDelete;
+            }
+            set
+            {
+                Settings.Default.ConfirmDelete = value;
+                Settings.Default.Save();
+            }
+        }
     }
 }

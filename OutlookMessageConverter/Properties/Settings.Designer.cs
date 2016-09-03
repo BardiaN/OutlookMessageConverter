@@ -34,5 +34,29 @@ namespace OutlookMessageConverter.Properties {
                 this["AlwaysOnTop"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ConfirmDelete {
+            get {
+                return ((bool)(this["ConfirmDelete"]));
+            }
+            set {
+                this["ConfirmDelete"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DrawSeparatorLine {
+            get {
+                return ((bool)(this["DrawSeparatorLine"]));
+            }
+            set {
+                this["DrawSeparatorLine"] = value;
+            }
+        }
     }
 }

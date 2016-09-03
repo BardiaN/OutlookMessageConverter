@@ -5,13 +5,13 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("OutlookMessageConverter")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Outlook Message Converter")]
+[assembly: AssemblyDescription("This a simple application for converting your outlook messages into a PDF")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Simon Kirkland")]
 [assembly: AssemblyProduct("OutlookMessageConverter")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCopyright("Copyright ©Simon Kirkland  2016")]
+[assembly: AssemblyTrademark("Simon Kirkland")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 

@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using OutlookMessageConverter.InfraStructure;
-
+using OutlookMessageConverter.Properties;
 
 namespace OutlookMessageConverter
 {
@@ -23,7 +23,10 @@ namespace OutlookMessageConverter
         }
         private void FormMain_Load(object sender, EventArgs e)
         {
+            this.TopMost = ConfigurationHelper.AlwaysOnTop;
             alwaysOnTopToolStripMenuItem.Checked = this.TopMost;
+            showDeleteConfirmToolStripMenuItem.Checked = ConfigurationHelper.ConfirmDelete;
+            checkBoxPutLineBetweenMessages.Checked = ConfigurationHelper.DrawSeparatorLine;
         }
         private void MessagesTreeView_DragEnter(object sender, DragEventArgs e)
         {
@@ -65,6 +68,12 @@ namespace OutlookMessageConverter
             this.TopMost = alwaysOnTopToolStripMenuItem.Checked;
         }
 
+        private void showDeleteConfirmToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ConfigurationHelper.ConfirmDelete = !ConfigurationHelper.ConfirmDelete;
+            showDeleteConfirmToolStripMenuItem.Checked = ConfigurationHelper.ConfirmDelete;
+        }
+
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
@@ -76,6 +85,82 @@ namespace OutlookMessageConverter
             {
                 LoadFilesToTree(this.openFileDialogMessages.FileNames);
             }
+        }
+
+        private void FormMain_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                DeleteSelectedNode();
+            }
+        }
+
+        private void UpButton_Click(object sender, EventArgs e)
+        {
+            if (MessagesTreeView.SelectedNode != null)
+            {
+                if (MessagesTreeView.SelectedNode.PrevNode != null)
+                {
+                    TreeNode selectedNode = MessagesTreeView.SelectedNode;
+                    int newIndexNode = MessagesTreeView.SelectedNode.PrevNode.Index;
+                    MessagesTreeView.SelectedNode.Remove();
+                    MessagesTreeView.Nodes.Insert(newIndexNode, selectedNode);
+                    MessagesTreeView.SelectedNode = selectedNode;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a message in the treeview first");
+            }
+        }
+
+        private void DownButton_Click(object sender, EventArgs e)
+        {
+            if (MessagesTreeView.SelectedNode != null)
+            {
+                if (MessagesTreeView.SelectedNode.NextNode != null)
+                {
+                    TreeNode selectedNode = MessagesTreeView.SelectedNode;
+                    int newIndexNode = MessagesTreeView.SelectedNode.NextNode.Index;
+                    MessagesTreeView.SelectedNode.Remove();
+                    MessagesTreeView.Nodes.Insert(newIndexNode, selectedNode);
+                    MessagesTreeView.SelectedNode = selectedNode;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a message in the treeview first");
+            }
+        }
+
+        private void buttonExportPDF_Click(object sender, EventArgs e)
+        {
+            ConfigurationHelper.DrawSeparatorLine = checkBoxPutLineBetweenMessages.Checked;
+        }
+
+        private void UpButton_Enter(object sender, EventArgs e)
+        {
+            MessagesTreeView.Focus();
+        }
+
+        private void DownButton_Enter(object sender, EventArgs e)
+        {
+            MessagesTreeView.Focus();
+        }
+
+        private void expandAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessagesTreeView.ExpandAll();
+        }
+
+        private void collapseAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessagesTreeView.CollapseAll();
+        }
+
+        private void deleteNodeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DeleteSelectedNode();
         }
 
         #endregion
@@ -132,6 +217,21 @@ namespace OutlookMessageConverter
                     this.LoadMsgToTree(subMessage, subMessageNode.Nodes.Add("MSG"));
                 }
             }
+            if(MessagesTreeView.Nodes.Count > 0 &&
+                !UpButton.Enabled &&
+                !DownButton.Enabled)
+            {
+                ChangeUpDownButtonsEnable(true);
+            }
+            rootNode.Expand();
+        }
+
+        private void ChangeUpDownButtonsEnable(bool enabled)
+        {
+            UpButton.BackgroundImage = enabled ? Resources.sort_up : Resources.sort_up_disabled;
+            UpButton.Enabled = enabled;
+            DownButton.BackgroundImage = enabled ? Resources.sort_down : Resources.sort_down_disabled;
+            DownButton.Enabled = enabled;
         }
 
         private string GetShortMessage(string messageBody)
@@ -143,18 +243,29 @@ namespace OutlookMessageConverter
             return messageBody;
         }
 
-
-        #endregion
-
-        private void FormMain_KeyDown(object sender, KeyEventArgs e)
+        private void DeleteSelectedNode()
         {
-            if(e.KeyCode == Keys.Delete)
+            if (MessagesTreeView.SelectedNode != null)
             {
-                if(MessagesTreeView.SelectedNode != null)
+                if (!ConfigurationHelper.ConfirmDelete
+                    ||
+                    MessageBox.Show("Are you sure?", "Delete confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    MessagesTreeView.Nodes.Remove(MessagesTreeView.SelectedNode);
+                    TreeNode parentNode = MessagesTreeView.SelectedNode;
+                    while (parentNode.Parent != null)
+                    {
+                        parentNode = parentNode.Parent;
+                    }
+                    MessagesTreeView.Nodes.Remove(parentNode);
+                    if(MessagesTreeView.Nodes.Count == 0)
+                    {
+                        ChangeUpDownButtonsEnable(false);
+                    }
                 }
             }
         }
+
+        #endregion
+
     }
 }

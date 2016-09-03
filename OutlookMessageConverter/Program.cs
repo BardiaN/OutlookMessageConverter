@@ -18,6 +18,7 @@ namespace OutlookMessageConverter
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             FormMain mainForm = new OutlookMessageConverter.FormMain();
+            mainForm.Icon = Properties.Resources.mail_32;
             mainForm.TopMost = ConfigurationHelper.AlwaysOnTop;
             Application.Run(mainForm);
         }
