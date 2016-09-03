@@ -34,6 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -52,6 +53,7 @@
     <Compile Include="Form.Main.Designer.cs">
       <DependentUpon>Form.Main.cs</DependentUpon>
     </Compile>
+    <Compile Include="InfraStructure\ConfigurationHelper.cs" />
     <Compile Include="InfraStructure\OutlookDataObject.cs" />
     <Compile Include="InfraStructure\OutlookStorage.cs" />
     <Compile Include="Program.cs" />

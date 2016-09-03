@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using OutlookMessageConverter.InfraStructure;
 
 namespace OutlookMessageConverter
 {
@@ -16,7 +17,9 @@ namespace OutlookMessageConverter
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormMain());
+            FormMain mainForm = new OutlookMessageConverter.FormMain();
+            mainForm.TopMost = ConfigurationHelper.AlwaysOnTop;
+            Application.Run(mainForm);
         }
     }
 }
