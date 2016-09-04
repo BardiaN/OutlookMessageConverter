@@ -37,7 +37,11 @@ namespace OutlookMessageConverter.InfraStructure
                 string messageHtml = "";
                 foreach (var message in messages)
                 {
-                    messageHtml += repeatArea.Replace("@FROM@", message.From).Replace("@SUBJECT@", message.Subject).Replace("@BODY@", message.Body);
+                    messageHtml +=
+                        repeatArea.Replace("@FROM@", message.From)
+                                  .Replace("@SUBJECT@", message.Subject)
+                                  .Replace("@BODY@", message.Body)
+                                  .Replace("@RECEIVEDON@", message.ReceivedOn);
                 }
                 htmlCode = htmlCode.Remove(repeatAreaStartIndex, repeatAreaEndIndex - repeatAreaStartIndex);
                 htmlCode = htmlCode.Insert(repeatAreaStartIndex, messageHtml);

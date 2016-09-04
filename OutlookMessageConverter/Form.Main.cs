@@ -167,7 +167,8 @@ namespace OutlookMessageConverter
                                 {
                                     From = node.Nodes["fromNode"] != null ? (node.Nodes["fromNode"].Tag.ToString()) : (string.Empty),
                                     Subject = node.Text,
-                                    Body = node.Tag.ToString()
+                                    Body = node.Tag.ToString(),
+                                    ReceivedOn = node.Nodes["ReceivedOn"].Tag.ToString()
                                 })
                             .ToList();
                     string errorMessage;
@@ -264,6 +265,10 @@ namespace OutlookMessageConverter
             TreeNode bodyNode = rootNode.Nodes.Add("Body: " + GetShortMessage(message.BodyText));
             bodyNode.Tag = new string[] { message.BodyText, message.BodyRtf };
             rootNode.Tag = message.BodyText;
+
+            TreeNode dateNode = rootNode.Nodes.Add("Received On: " + message.ReceivedOn);
+            dateNode.Tag = message.ReceivedOn;
+            dateNode.Name = "ReceivedOn";
 
             if (!string.IsNullOrEmpty(message.Sender.DisplayName) || !string.IsNullOrEmpty(message.Sender.Email))
             {
