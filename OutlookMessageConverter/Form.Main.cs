@@ -61,11 +61,13 @@ namespace OutlookMessageConverter
                 {
                     //use the fileindex to get the name and data stream
                     string filename = filenames[fileIndex];
-                    MemoryStream filestream = filestreams[fileIndex];
-
-                    OutlookStorage.Message message = new OutlookStorage.Message(filestream);
-                    this.LoadMsgToTree(message, this.MessagesTreeView.Nodes.Add("root"));
-                    message.Dispose();
+                    using (MemoryStream filestream = filestreams[fileIndex])
+                    {
+                        using (MsgReader.Outlook.Storage.Message message = new MsgReader.Outlook.Storage.Message(filestream, FileAccess.Read))
+                        {
+                            this.LoadMsgToTree(message, this.MessagesTreeView.Nodes.Add("root"));
+                        }
+                    }
                 }
             }
         }
@@ -108,13 +110,17 @@ namespace OutlookMessageConverter
         {
             if (MessagesTreeView.SelectedNode != null)
             {
-                if (MessagesTreeView.SelectedNode.PrevNode != null)
+                TreeNode parentNode = MessagesTreeView.SelectedNode;
+                while (parentNode.Parent != null)
                 {
-                    TreeNode selectedNode = MessagesTreeView.SelectedNode;
-                    int newIndexNode = MessagesTreeView.SelectedNode.PrevNode.Index;
-                    MessagesTreeView.SelectedNode.Remove();
-                    MessagesTreeView.Nodes.Insert(newIndexNode, selectedNode);
-                    MessagesTreeView.SelectedNode = selectedNode;
+                    parentNode = parentNode.Parent;
+                }
+                if (parentNode.PrevNode != null)
+                {
+                    int newIndexNode = parentNode.PrevNode.Index;
+                    parentNode.Remove();
+                    MessagesTreeView.Nodes.Insert(newIndexNode, parentNode);
+                    MessagesTreeView.SelectedNode = parentNode;
                 }
             }
             else
@@ -127,13 +133,17 @@ namespace OutlookMessageConverter
         {
             if (MessagesTreeView.SelectedNode != null)
             {
-                if (MessagesTreeView.SelectedNode.NextNode != null)
+                TreeNode parentNode = MessagesTreeView.SelectedNode;
+                while (parentNode.Parent != null)
                 {
-                    TreeNode selectedNode = MessagesTreeView.SelectedNode;
-                    int newIndexNode = MessagesTreeView.SelectedNode.NextNode.Index;
-                    MessagesTreeView.SelectedNode.Remove();
-                    MessagesTreeView.Nodes.Insert(newIndexNode, selectedNode);
-                    MessagesTreeView.SelectedNode = selectedNode;
+                    parentNode = parentNode.Parent;
+                }
+                if (parentNode.NextNode != null)
+                {
+                    int newIndexNode = parentNode.NextNode.Index;
+                    parentNode.Remove();
+                    MessagesTreeView.Nodes.Insert(newIndexNode, parentNode);
+                    MessagesTreeView.SelectedNode = parentNode;
                 }
             }
             else
@@ -161,7 +171,7 @@ namespace OutlookMessageConverter
                                 })
                             .ToList();
                     string errorMessage;
-                    if(!PdfGenerator.GeneratePdf(messages, saveFileDialogExport.FileName,out errorMessage))
+                    if (!PdfGenerator.GeneratePdf(messages, saveFileDialogExport.FileName, out errorMessage))
                     {
                         MessageBox.Show("Error in generating pdf:" + errorMessage);
                     }
@@ -209,15 +219,17 @@ namespace OutlookMessageConverter
 
         private void LoadFilesToTree(string[] fileNames)
         {
+            CheckTreeMessages();
             foreach (string msgfile in fileNames)
             {
-                Stream messageStream = File.Open(msgfile, FileMode.Open, FileAccess.Read);
-                OutlookStorage.Message message = new OutlookStorage.Message(messageStream);
-                messageStream.Close();
-
-                CheckTreeMessages();
-                this.LoadMsgToTree(message, this.MessagesTreeView.Nodes.Add("root"));
-                message.Dispose();
+                using (FileStream messageStream = File.Open(msgfile, FileMode.Open, FileAccess.Read))
+                {
+                    using (MsgReader.Outlook.Storage.Message message =
+                        new MsgReader.Outlook.Storage.Message(messageStream, FileAccess.Read))
+                    {
+                        this.LoadMsgToTree(message, this.MessagesTreeView.Nodes.Add("root"));
+                    }
+                }
             }
         }
 
@@ -245,25 +257,26 @@ namespace OutlookMessageConverter
             }
         }
 
-        private void LoadMsgToTree(OutlookStorage.Message message, TreeNode rootNode)
+        private void LoadMsgToTree(MsgReader.Outlook.Storage.Message message, TreeNode rootNode)
         {
             rootNode.Text = message.Subject;
             rootNode.Nodes.Add("Subject: " + message.Subject);
             TreeNode bodyNode = rootNode.Nodes.Add("Body: " + GetShortMessage(message.BodyText));
-            bodyNode.Tag = new string[] { message.BodyText, message.BodyRTF };
+            bodyNode.Tag = new string[] { message.BodyText, message.BodyRtf };
             rootNode.Tag = message.BodyText;
 
-            if (!string.IsNullOrEmpty(message.From))
+            if (!string.IsNullOrEmpty(message.Sender.DisplayName) || !string.IsNullOrEmpty(message.Sender.Email))
             {
-                TreeNode fromNode = rootNode.Nodes.Add("From: " + message.From);
-                fromNode.Tag = message.From;
+                string fromText = message.Sender.DisplayName + "<" + message.Sender.Email + ">";
+                TreeNode fromNode = rootNode.Nodes.Add("From: " + fromText);
+                fromNode.Tag = fromText;
                 fromNode.Name = "fromNode";
             }
 
             if (message.Recipients.Count > 1)
             {
                 TreeNode recipientNode = rootNode.Nodes.Add("Recipients: " + message.Recipients.Count);
-                foreach (OutlookStorage.Recipient recipient in message.Recipients)
+                foreach (MsgReader.Outlook.Storage.Recipient recipient in message.Recipients)
                 {
                     recipientNode.Nodes.Add(recipient.Type + ": " + recipient.Email);
                 }
@@ -276,21 +289,12 @@ namespace OutlookMessageConverter
             if (message.Attachments.Count > 0)
             {
                 TreeNode attachmentNode = rootNode.Nodes.Add("Attachments: " + message.Attachments.Count);
-                foreach (OutlookStorage.Attachment attachment in message.Attachments)
+                foreach (MsgReader.Outlook.Storage.Attachment.Attachment attachment in message.Attachments)
                 {
-                    attachmentNode.Nodes.Add(attachment.Filename + ": " + attachment.Data.Length + "b");
+                    attachmentNode.Nodes.Add(attachment.FileName + ": " + attachment.Data.Length + "b");
                 }
             }
 
-            if (message.Messages.Count > 0)
-            {
-                TreeNode subMessageNode = rootNode.Nodes.Add("Sub Messages: " + message.Messages.Count);
-                CheckTreeMessages();
-                foreach (OutlookStorage.Message subMessage in message.Messages)
-                {
-                    this.LoadMsgToTree(subMessage, subMessageNode.Nodes.Add("MSG"));
-                }
-            }
             if (MessagesTreeView.Nodes.Count > 0 &&
                 !UpButton.Enabled &&
                 !DownButton.Enabled)
@@ -311,9 +315,9 @@ namespace OutlookMessageConverter
 
         private string GetShortMessage(string messageBody)
         {
-            if (!string.IsNullOrEmpty(messageBody) && messageBody.Length > 10)
+            if (!string.IsNullOrEmpty(messageBody) && messageBody.Length > 30)
             {
-                return messageBody.Substring(0, 7) + "...";
+                return messageBody.Substring(0, 27) + "...";
             }
             return messageBody;
         }
