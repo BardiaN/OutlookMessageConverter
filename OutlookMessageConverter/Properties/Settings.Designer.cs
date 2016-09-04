@@ -50,12 +50,12 @@ namespace OutlookMessageConverter.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool DrawSeparatorLine {
+        public bool ShowHintOnLoad {
             get {
-                return ((bool)(this["DrawSeparatorLine"]));
+                return ((bool)(this["ShowHintOnLoad"]));
             }
             set {
-                this["DrawSeparatorLine"] = value;
+                this["ShowHintOnLoad"] = value;
             }
         }
     }

@@ -23,15 +23,15 @@ namespace OutlookMessageConverter.InfraStructure
             }
         }
 
-        public static bool DrawSeparatorLine
+        public static bool ShowHintOnLoad
         {
             get
             {
-                return Settings.Default.DrawSeparatorLine;
+                return Settings.Default.ShowHintOnLoad;
             }
             set
             {
-                Settings.Default.DrawSeparatorLine = value;
+                Settings.Default.ShowHintOnLoad = value;
                 Settings.Default.Save();
             }
         }

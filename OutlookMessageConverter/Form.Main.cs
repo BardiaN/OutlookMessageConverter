@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using OutlookMessageConverter.InfraStructure;
@@ -26,7 +27,12 @@ namespace OutlookMessageConverter
             this.TopMost = ConfigurationHelper.AlwaysOnTop;
             alwaysOnTopToolStripMenuItem.Checked = this.TopMost;
             showDeleteConfirmToolStripMenuItem.Checked = ConfigurationHelper.ConfirmDelete;
+            if(ConfigurationHelper.ShowHintOnLoad)
+            {
+                ShowHelp();
+            }
         }
+
         private void MessagesTreeView_DragEnter(object sender, DragEventArgs e)
         {
             e.Effect = DragDropEffects.All;
@@ -188,6 +194,11 @@ namespace OutlookMessageConverter
             DeleteSelectedNode();
         }
 
+        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowHelp();
+        }
+
         #endregion
 
         #region Methods
@@ -209,7 +220,7 @@ namespace OutlookMessageConverter
         {
             rootNode.Text = message.Subject;
             rootNode.Nodes.Add("Subject: " + message.Subject);
-            TreeNode bodyNode = rootNode.Nodes.Add("Body: " + GetShortMessage(message.BodyText) + "(double click to view)");
+            TreeNode bodyNode = rootNode.Nodes.Add("Body: " + GetShortMessage(message.BodyText));
             bodyNode.Tag = new string[] { message.BodyText, message.BodyRTF };
             rootNode.Tag = message.BodyText;
 
@@ -299,7 +310,22 @@ namespace OutlookMessageConverter
             }
         }
 
+        private void ShowHelp()
+        {
+            new Thread(new ThreadStart(ShowHelpThreadSafe)).Start();
+        }
+
+        private void ShowHelpThreadSafe()
+        {
+            using (FormHelp help = new FormHelp())
+            {
+                help.StartPosition = FormStartPosition.CenterScreen;
+                help.ShowDialog();
+            }
+        }
+
         #endregion
+
 
     }
 }

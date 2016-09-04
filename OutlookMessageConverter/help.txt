@@ -1,0 +1,16 @@
+﻿Welcome to the outlook message converter!
++ You can start the process using one of these steps:
+- Drag your Outlook message(s) directly from the Outlook!
+Or
+- Drag your saved Outlook message(s) from your hard drive (.msg file(s))
+Or
+- Import your .msg file(s) using the "File > Import From File" menu
+
++ You can change the order of dropped messages using up and down keys in left side of the tree view.
++ You added a message by mistake? No problem at all, just select the message node in the tree view, then press "Delete" button on your keyboard or select the "Tree View > Delete Node" menu.
++ You can use "Tree View > Expand All/Collapse All" to view your message nodes better, before you export them into the PDF file.
++ Finally, just click the export button and save your PDF!
+
+* There are some tweaks to make your experience better:
+- Always on top: It could help keep your application on top of every other window, so you can easily drag and drop your messages from Outlook
+- Show confirm on delete: If you need a confirmation before deleting every tree node, you can set this on. (helps to prevent deleting by mistake)
