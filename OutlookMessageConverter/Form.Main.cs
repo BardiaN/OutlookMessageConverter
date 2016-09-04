@@ -26,7 +26,6 @@ namespace OutlookMessageConverter
             this.TopMost = ConfigurationHelper.AlwaysOnTop;
             alwaysOnTopToolStripMenuItem.Checked = this.TopMost;
             showDeleteConfirmToolStripMenuItem.Checked = ConfigurationHelper.ConfirmDelete;
-            checkBoxPutLineBetweenMessages.Checked = ConfigurationHelper.DrawSeparatorLine;
         }
         private void MessagesTreeView_DragEnter(object sender, DragEventArgs e)
         {
@@ -81,7 +80,7 @@ namespace OutlookMessageConverter
 
         private void importFromFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(openFileDialogMessages.ShowDialog() == DialogResult.OK)
+            if (openFileDialogMessages.ShowDialog() == DialogResult.OK)
             {
                 LoadFilesToTree(this.openFileDialogMessages.FileNames);
             }
@@ -135,7 +134,33 @@ namespace OutlookMessageConverter
 
         private void buttonExportPDF_Click(object sender, EventArgs e)
         {
-            ConfigurationHelper.DrawSeparatorLine = checkBoxPutLineBetweenMessages.Checked;
+            if (MessagesTreeView.Nodes.Count > 0)
+            {
+                saveFileDialogExport.FileName = "ExportedMessages" + DateTime.Now.ToString("yyyy-MM-dd_hh-mm");
+                if (saveFileDialogExport.ShowDialog() == DialogResult.OK)
+                {
+                    var messages =
+                        MessagesTreeView.Nodes
+                            .OfType<TreeNode>()
+                            .Select(
+                                node => new EmailModel
+                                {
+                                    From = node.Nodes["fromNode"] != null ? (node.Nodes["fromNode"].Tag.ToString()) : (string.Empty),
+                                    Subject = node.Text,
+                                    Body = node.Tag.ToString()
+                                })
+                            .ToList();
+                    string errorMessage;
+                    if(!PdfGenerator.GeneratePdf(messages, saveFileDialogExport.FileName,out errorMessage))
+                    {
+                        MessageBox.Show("Error in generating pdf:" + errorMessage);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please add some messages first");
+            }
         }
 
         private void UpButton_Enter(object sender, EventArgs e)
@@ -184,8 +209,16 @@ namespace OutlookMessageConverter
         {
             rootNode.Text = message.Subject;
             rootNode.Nodes.Add("Subject: " + message.Subject);
-            TreeNode bodyNode = rootNode.Nodes.Add("Body: " + GetShortMessage(message.BodyText)  + "(double click to view)");
+            TreeNode bodyNode = rootNode.Nodes.Add("Body: " + GetShortMessage(message.BodyText) + "(double click to view)");
             bodyNode.Tag = new string[] { message.BodyText, message.BodyRTF };
+            rootNode.Tag = message.BodyText;
+
+            if (!string.IsNullOrEmpty(message.From))
+            {
+                TreeNode fromNode = rootNode.Nodes.Add("From: " + message.From);
+                fromNode.Tag = message.From;
+                fromNode.Name = "fromNode";
+            }
 
             if (message.Recipients.Count > 1)
             {
@@ -195,7 +228,7 @@ namespace OutlookMessageConverter
                     recipientNode.Nodes.Add(recipient.Type + ": " + recipient.Email);
                 }
             }
-            else if(message.Recipients.Count > 0)
+            else if (message.Recipients.Count > 0)
             {
                 TreeNode recipientNode = rootNode.Nodes.Add("Recipient: " + message.Recipients.First().Email);
             }
@@ -217,7 +250,7 @@ namespace OutlookMessageConverter
                     this.LoadMsgToTree(subMessage, subMessageNode.Nodes.Add("MSG"));
                 }
             }
-            if(MessagesTreeView.Nodes.Count > 0 &&
+            if (MessagesTreeView.Nodes.Count > 0 &&
                 !UpButton.Enabled &&
                 !DownButton.Enabled)
             {
@@ -232,11 +265,12 @@ namespace OutlookMessageConverter
             UpButton.Enabled = enabled;
             DownButton.BackgroundImage = enabled ? Resources.sort_down : Resources.sort_down_disabled;
             DownButton.Enabled = enabled;
+            buttonExportPDF.Enabled = enabled;
         }
 
         private string GetShortMessage(string messageBody)
         {
-            if(!string.IsNullOrEmpty(messageBody) && messageBody.Length > 10)
+            if (!string.IsNullOrEmpty(messageBody) && messageBody.Length > 10)
             {
                 return messageBody.Substring(0, 7) + "...";
             }
@@ -257,7 +291,7 @@ namespace OutlookMessageConverter
                         parentNode = parentNode.Parent;
                     }
                     MessagesTreeView.Nodes.Remove(parentNode);
-                    if(MessagesTreeView.Nodes.Count == 0)
+                    if (MessagesTreeView.Nodes.Count == 0)
                     {
                         ChangeUpDownButtonsEnable(false);
                     }

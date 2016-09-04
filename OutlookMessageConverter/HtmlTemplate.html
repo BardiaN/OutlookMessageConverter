@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Simon's Converted Messages</title>
+    <style>
+        .center {
+            text-align: center;
+        }
+        .emailBody {
+            text-align: justify;
+        }
+        .container {
+            margin: 2px 2px 2px 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="center">
+            <h2>Simon's Exported Messages</h2>
+        </div>
+        <hr />
+        <ul>
+            @REPEATAREA@
+            <li><h3>@FROM@ : @SUBJECT@</h3><p class="emailBody">@BODY@</p></li>
+            @REPEATAREA@
+        </ul>
+    </div>
+</body>
+</html>

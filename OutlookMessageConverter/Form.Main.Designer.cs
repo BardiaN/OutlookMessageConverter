@@ -30,46 +30,44 @@
         {
             this.MainTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.MessagesTreeView = new System.Windows.Forms.TreeView();
-            this.mainMenu = new System.Windows.Forms.MenuStrip();
-            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.alwaysOnTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openFileDialogMessages = new System.Windows.Forms.OpenFileDialog();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.treeViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.expandAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.collapseAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DownButton = new System.Windows.Forms.Button();
+            this.UpButton = new System.Windows.Forms.Button();
+            this.buttonExportPDF = new System.Windows.Forms.Button();
+            this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importFromFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.alwaysOnTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showDeleteConfirmToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.treeViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.expandAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.collapseAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteNodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.DownButton = new System.Windows.Forms.Button();
-            this.UpButton = new System.Windows.Forms.Button();
-            this.ExportOptionTableLayout = new System.Windows.Forms.TableLayoutPanel();
-            this.checkBoxPutLineBetweenMessages = new System.Windows.Forms.CheckBox();
-            this.buttonExportPDF = new System.Windows.Forms.Button();
+            this.openFileDialogMessages = new System.Windows.Forms.OpenFileDialog();
+            this.saveFileDialogExport = new System.Windows.Forms.SaveFileDialog();
             this.MainTableLayoutPanel.SuspendLayout();
-            this.mainMenu.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
-            this.ExportOptionTableLayout.SuspendLayout();
+            this.mainMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainTableLayoutPanel
             // 
-            this.MainTableLayoutPanel.ColumnCount = 3;
+            this.MainTableLayoutPanel.ColumnCount = 2;
             this.MainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.MainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.MainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.MainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.MainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.MainTableLayoutPanel.Controls.Add(this.MessagesTreeView, 1, 0);
             this.MainTableLayoutPanel.Controls.Add(this.tableLayoutPanel1, 0, 0);
-            this.MainTableLayoutPanel.Controls.Add(this.ExportOptionTableLayout, 2, 0);
+            this.MainTableLayoutPanel.Controls.Add(this.buttonExportPDF, 1, 1);
             this.MainTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MainTableLayoutPanel.Location = new System.Drawing.Point(0, 24);
             this.MainTableLayoutPanel.Name = "MainTableLayoutPanel";
             this.MainTableLayoutPanel.RowCount = 2;
             this.MainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 89.25F));
             this.MainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.75F));
-            this.MainTableLayoutPanel.Size = new System.Drawing.Size(700, 400);
+            this.MainTableLayoutPanel.Size = new System.Drawing.Size(601, 400);
             this.MainTableLayoutPanel.TabIndex = 0;
             // 
             // MessagesTreeView
@@ -78,46 +76,10 @@
             this.MessagesTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MessagesTreeView.Location = new System.Drawing.Point(43, 3);
             this.MessagesTreeView.Name = "MessagesTreeView";
-            this.MainTableLayoutPanel.SetRowSpan(this.MessagesTreeView, 2);
-            this.MessagesTreeView.Size = new System.Drawing.Size(324, 394);
+            this.MessagesTreeView.Size = new System.Drawing.Size(555, 351);
             this.MessagesTreeView.TabIndex = 3;
             this.MessagesTreeView.DragDrop += new System.Windows.Forms.DragEventHandler(this.MessagesTreeView_DragDrop);
             this.MessagesTreeView.DragEnter += new System.Windows.Forms.DragEventHandler(this.MessagesTreeView_DragEnter);
-            // 
-            // mainMenu
-            // 
-            this.mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem,
-            this.settingsToolStripMenuItem,
-            this.treeViewToolStripMenuItem});
-            this.mainMenu.Location = new System.Drawing.Point(0, 0);
-            this.mainMenu.Name = "mainMenu";
-            this.mainMenu.Size = new System.Drawing.Size(700, 24);
-            this.mainMenu.TabIndex = 1;
-            this.mainMenu.Text = "menuStrip1";
-            // 
-            // settingsToolStripMenuItem
-            // 
-            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.alwaysOnTopToolStripMenuItem,
-            this.showDeleteConfirmToolStripMenuItem});
-            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
-            this.settingsToolStripMenuItem.Text = "&Settings";
-            // 
-            // alwaysOnTopToolStripMenuItem
-            // 
-            this.alwaysOnTopToolStripMenuItem.Name = "alwaysOnTopToolStripMenuItem";
-            this.alwaysOnTopToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
-            this.alwaysOnTopToolStripMenuItem.Text = "&Always On Top";
-            this.alwaysOnTopToolStripMenuItem.Click += new System.EventHandler(this.alwaysOnTopToolStripMenuItem_Click);
-            // 
-            // openFileDialogMessages
-            // 
-            this.openFileDialogMessages.AddExtension = false;
-            this.openFileDialogMessages.Filter = "msg files|*.msg";
-            this.openFileDialogMessages.Multiselect = true;
-            this.openFileDialogMessages.RestoreDirectory = true;
             // 
             // tableLayoutPanel1
             // 
@@ -135,68 +97,6 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(34, 394);
             this.tableLayoutPanel1.TabIndex = 4;
-            // 
-            // treeViewToolStripMenuItem
-            // 
-            this.treeViewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.expandAllToolStripMenuItem,
-            this.collapseAllToolStripMenuItem,
-            this.deleteNodeToolStripMenuItem});
-            this.treeViewToolStripMenuItem.Name = "treeViewToolStripMenuItem";
-            this.treeViewToolStripMenuItem.Size = new System.Drawing.Size(70, 20);
-            this.treeViewToolStripMenuItem.Text = "&Tree View";
-            // 
-            // expandAllToolStripMenuItem
-            // 
-            this.expandAllToolStripMenuItem.Name = "expandAllToolStripMenuItem";
-            this.expandAllToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
-            this.expandAllToolStripMenuItem.Text = "&Expand All";
-            this.expandAllToolStripMenuItem.Click += new System.EventHandler(this.expandAllToolStripMenuItem_Click);
-            // 
-            // collapseAllToolStripMenuItem
-            // 
-            this.collapseAllToolStripMenuItem.Name = "collapseAllToolStripMenuItem";
-            this.collapseAllToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
-            this.collapseAllToolStripMenuItem.Text = "&Collapse All";
-            this.collapseAllToolStripMenuItem.Click += new System.EventHandler(this.collapseAllToolStripMenuItem_Click);
-            // 
-            // fileToolStripMenuItem
-            // 
-            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.importFromFileToolStripMenuItem,
-            this.exitToolStripMenuItem});
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-            this.fileToolStripMenuItem.Text = "&File";
-            // 
-            // importFromFileToolStripMenuItem
-            // 
-            this.importFromFileToolStripMenuItem.Name = "importFromFileToolStripMenuItem";
-            this.importFromFileToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
-            this.importFromFileToolStripMenuItem.Text = "&Import from file";
-            this.importFromFileToolStripMenuItem.Click += new System.EventHandler(this.importFromFileToolStripMenuItem_Click);
-            // 
-            // exitToolStripMenuItem
-            // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
-            this.exitToolStripMenuItem.Text = "E&xit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
-            // 
-            // showDeleteConfirmToolStripMenuItem
-            // 
-            this.showDeleteConfirmToolStripMenuItem.Name = "showDeleteConfirmToolStripMenuItem";
-            this.showDeleteConfirmToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
-            this.showDeleteConfirmToolStripMenuItem.Text = "Show delete confirm";
-            this.showDeleteConfirmToolStripMenuItem.Click += new System.EventHandler(this.showDeleteConfirmToolStripMenuItem_Click);
-            // 
-            // deleteNodeToolStripMenuItem
-            // 
-            this.deleteNodeToolStripMenuItem.Name = "deleteNodeToolStripMenuItem";
-            this.deleteNodeToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-            this.deleteNodeToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
-            this.deleteNodeToolStripMenuItem.Text = "Delete Node";
-            this.deleteNodeToolStripMenuItem.Click += new System.EventHandler(this.deleteNodeToolStripMenuItem_Click);
             // 
             // DownButton
             // 
@@ -229,48 +129,128 @@
             this.UpButton.Click += new System.EventHandler(this.UpButton_Click);
             this.UpButton.Enter += new System.EventHandler(this.UpButton_Enter);
             // 
-            // ExportOptionTableLayout
-            // 
-            this.ExportOptionTableLayout.ColumnCount = 1;
-            this.ExportOptionTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.ExportOptionTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.ExportOptionTableLayout.Controls.Add(this.checkBoxPutLineBetweenMessages, 0, 0);
-            this.ExportOptionTableLayout.Controls.Add(this.buttonExportPDF, 0, 1);
-            this.ExportOptionTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ExportOptionTableLayout.Location = new System.Drawing.Point(373, 3);
-            this.ExportOptionTableLayout.Name = "ExportOptionTableLayout";
-            this.ExportOptionTableLayout.RowCount = 2;
-            this.ExportOptionTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.122507F));
-            this.ExportOptionTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 92.87749F));
-            this.ExportOptionTableLayout.Size = new System.Drawing.Size(324, 351);
-            this.ExportOptionTableLayout.TabIndex = 5;
-            // 
-            // checkBoxPutLineBetweenMessages
-            // 
-            this.checkBoxPutLineBetweenMessages.AutoSize = true;
-            this.checkBoxPutLineBetweenMessages.Location = new System.Drawing.Point(3, 3);
-            this.checkBoxPutLineBetweenMessages.Name = "checkBoxPutLineBetweenMessages";
-            this.checkBoxPutLineBetweenMessages.Size = new System.Drawing.Size(173, 17);
-            this.checkBoxPutLineBetweenMessages.TabIndex = 0;
-            this.checkBoxPutLineBetweenMessages.Text = "Draw a line between messages";
-            this.checkBoxPutLineBetweenMessages.UseVisualStyleBackColor = true;
-            // 
             // buttonExportPDF
             // 
-            this.buttonExportPDF.Location = new System.Drawing.Point(3, 27);
+            this.buttonExportPDF.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.buttonExportPDF.Enabled = false;
+            this.buttonExportPDF.Location = new System.Drawing.Point(277, 361);
             this.buttonExportPDF.Name = "buttonExportPDF";
-            this.buttonExportPDF.Size = new System.Drawing.Size(75, 23);
+            this.buttonExportPDF.Size = new System.Drawing.Size(86, 34);
             this.buttonExportPDF.TabIndex = 1;
             this.buttonExportPDF.Text = "Export PDF";
             this.buttonExportPDF.UseVisualStyleBackColor = true;
             this.buttonExportPDF.Click += new System.EventHandler(this.buttonExportPDF_Click);
+            // 
+            // mainMenu
+            // 
+            this.mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem,
+            this.settingsToolStripMenuItem,
+            this.treeViewToolStripMenuItem});
+            this.mainMenu.Location = new System.Drawing.Point(0, 0);
+            this.mainMenu.Name = "mainMenu";
+            this.mainMenu.Size = new System.Drawing.Size(601, 24);
+            this.mainMenu.TabIndex = 1;
+            this.mainMenu.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.importFromFileToolStripMenuItem,
+            this.exitToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Text = "&File";
+            // 
+            // importFromFileToolStripMenuItem
+            // 
+            this.importFromFileToolStripMenuItem.Name = "importFromFileToolStripMenuItem";
+            this.importFromFileToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.importFromFileToolStripMenuItem.Text = "&Import from file";
+            this.importFromFileToolStripMenuItem.Click += new System.EventHandler(this.importFromFileToolStripMenuItem_Click);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.exitToolStripMenuItem.Text = "E&xit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.alwaysOnTopToolStripMenuItem,
+            this.showDeleteConfirmToolStripMenuItem});
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.settingsToolStripMenuItem.Text = "&Settings";
+            // 
+            // alwaysOnTopToolStripMenuItem
+            // 
+            this.alwaysOnTopToolStripMenuItem.Name = "alwaysOnTopToolStripMenuItem";
+            this.alwaysOnTopToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.alwaysOnTopToolStripMenuItem.Text = "&Always On Top";
+            this.alwaysOnTopToolStripMenuItem.Click += new System.EventHandler(this.alwaysOnTopToolStripMenuItem_Click);
+            // 
+            // showDeleteConfirmToolStripMenuItem
+            // 
+            this.showDeleteConfirmToolStripMenuItem.Name = "showDeleteConfirmToolStripMenuItem";
+            this.showDeleteConfirmToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.showDeleteConfirmToolStripMenuItem.Text = "Show delete confirm";
+            this.showDeleteConfirmToolStripMenuItem.Click += new System.EventHandler(this.showDeleteConfirmToolStripMenuItem_Click);
+            // 
+            // treeViewToolStripMenuItem
+            // 
+            this.treeViewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.expandAllToolStripMenuItem,
+            this.collapseAllToolStripMenuItem,
+            this.deleteNodeToolStripMenuItem});
+            this.treeViewToolStripMenuItem.Name = "treeViewToolStripMenuItem";
+            this.treeViewToolStripMenuItem.Size = new System.Drawing.Size(70, 20);
+            this.treeViewToolStripMenuItem.Text = "&Tree View";
+            // 
+            // expandAllToolStripMenuItem
+            // 
+            this.expandAllToolStripMenuItem.Name = "expandAllToolStripMenuItem";
+            this.expandAllToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.expandAllToolStripMenuItem.Text = "&Expand All";
+            this.expandAllToolStripMenuItem.Click += new System.EventHandler(this.expandAllToolStripMenuItem_Click);
+            // 
+            // collapseAllToolStripMenuItem
+            // 
+            this.collapseAllToolStripMenuItem.Name = "collapseAllToolStripMenuItem";
+            this.collapseAllToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.collapseAllToolStripMenuItem.Text = "&Collapse All";
+            this.collapseAllToolStripMenuItem.Click += new System.EventHandler(this.collapseAllToolStripMenuItem_Click);
+            // 
+            // deleteNodeToolStripMenuItem
+            // 
+            this.deleteNodeToolStripMenuItem.Name = "deleteNodeToolStripMenuItem";
+            this.deleteNodeToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
+            this.deleteNodeToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.deleteNodeToolStripMenuItem.Text = "Delete Node";
+            this.deleteNodeToolStripMenuItem.Click += new System.EventHandler(this.deleteNodeToolStripMenuItem_Click);
+            // 
+            // openFileDialogMessages
+            // 
+            this.openFileDialogMessages.AddExtension = false;
+            this.openFileDialogMessages.Filter = "msg files|*.msg";
+            this.openFileDialogMessages.Multiselect = true;
+            this.openFileDialogMessages.RestoreDirectory = true;
+            // 
+            // saveFileDialogExport
+            // 
+            this.saveFileDialogExport.AddExtension = false;
+            this.saveFileDialogExport.FileName = "ExportedMessages.pdf";
+            this.saveFileDialogExport.Filter = "Pdf Files|*.pdf";
+            this.saveFileDialogExport.RestoreDirectory = true;
             // 
             // FormMain
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(700, 424);
+            this.ClientSize = new System.Drawing.Size(601, 424);
             this.Controls.Add(this.MainTableLayoutPanel);
             this.Controls.Add(this.mainMenu);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -284,11 +264,9 @@
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.MessagesTreeView_DragEnter);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FormMain_KeyDown);
             this.MainTableLayoutPanel.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
             this.mainMenu.ResumeLayout(false);
             this.mainMenu.PerformLayout();
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.ExportOptionTableLayout.ResumeLayout(false);
-            this.ExportOptionTableLayout.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -313,9 +291,8 @@
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showDeleteConfirmToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteNodeToolStripMenuItem;
-        private System.Windows.Forms.TableLayoutPanel ExportOptionTableLayout;
-        private System.Windows.Forms.CheckBox checkBoxPutLineBetweenMessages;
         private System.Windows.Forms.Button buttonExportPDF;
+        private System.Windows.Forms.SaveFileDialog saveFileDialogExport;
     }
 }
 
