@@ -49,26 +49,29 @@ namespace OutlookMessageConverter
             }
             else // Some Emails from outlook have been dragged to application
             {
-                //wrap standard IDataObject in OutlookDataObject
-                OutlookDataObject dataObject = new OutlookDataObject(e.Data);
-
-                //get the names and data streams of the files dropped
-                string[] filenames = (string[])dataObject.GetData("FileGroupDescriptor");
-                MemoryStream[] filestreams = (MemoryStream[])dataObject.GetData("FileContents");
-                CheckTreeMessages();
-
-                for (int fileIndex = 0; fileIndex < filenames.Length; fileIndex++)
+                new Thread(new ThreadStart(delegate ()
                 {
-                    //use the fileindex to get the name and data stream
-                    string filename = filenames[fileIndex];
-                    using (MemoryStream filestream = filestreams[fileIndex])
+                    //wrap standard IDataObject in OutlookDataObject
+                    OutlookDataObject dataObject = new OutlookDataObject(e.Data);
+
+                    //get the names and data streams of the files dropped
+                    string[] filenames = (string[])dataObject.GetData("FileGroupDescriptor");
+                    MemoryStream[] filestreams = (MemoryStream[])dataObject.GetData("FileContents");
+                    CheckTreeMessages();
+
+                    for (int fileIndex = 0; fileIndex < filenames.Length; fileIndex++)
                     {
-                        using (MsgReader.Outlook.Storage.Message message = new MsgReader.Outlook.Storage.Message(filestream, FileAccess.Read))
+                        //use the fileindex to get the name and data stream
+                        string filename = filenames[fileIndex];
+                        using (MemoryStream filestream = filestreams[fileIndex])
                         {
-                            this.LoadMsgToTree(message, this.MessagesTreeView.Nodes.Add("root"));
+                            using (MsgReader.Outlook.Storage.Message message = new MsgReader.Outlook.Storage.Message(filestream, FileAccess.Read))
+                            {
+                                this.LoadMsgToTree(message);
+                            }
                         }
                     }
-                }
+                })).Start();
             }
         }
 
@@ -221,17 +224,20 @@ namespace OutlookMessageConverter
         private void LoadFilesToTree(string[] fileNames)
         {
             CheckTreeMessages();
-            foreach (string msgfile in fileNames)
+            new Thread(new ThreadStart(delegate ()
             {
-                using (FileStream messageStream = File.Open(msgfile, FileMode.Open, FileAccess.Read))
+                foreach (string msgfile in fileNames)
                 {
-                    using (MsgReader.Outlook.Storage.Message message =
-                        new MsgReader.Outlook.Storage.Message(messageStream, FileAccess.Read))
+                    using (FileStream messageStream = File.Open(msgfile, FileMode.Open, FileAccess.Read))
                     {
-                        this.LoadMsgToTree(message, this.MessagesTreeView.Nodes.Add("root"));
+                        using (MsgReader.Outlook.Storage.Message message =
+                            new MsgReader.Outlook.Storage.Message(messageStream, FileAccess.Read))
+                        {
+                            this.LoadMsgToTree(message);
+                        }
                     }
                 }
-            }
+            })).Start();
         }
 
         private void CheckTreeMessages()
@@ -258,12 +264,29 @@ namespace OutlookMessageConverter
             }
         }
 
+
+        private delegate void LoadMsgToTreeCallback(MsgReader.Outlook.Storage.Message message);
+        private void LoadMsgToTree(MsgReader.Outlook.Storage.Message message)
+        {
+            if (MessagesTreeView.InvokeRequired)
+            {
+                MessagesTreeView.Invoke(new LoadMsgToTreeCallback(LoadMsgToTree), message);
+            }
+            else
+            {
+                LoadMsgToTree(message, this.MessagesTreeView.Nodes.Add("root"));
+            }
+        }
+
         private void LoadMsgToTree(MsgReader.Outlook.Storage.Message message, TreeNode rootNode)
         {
             rootNode.Text = message.Subject;
             rootNode.Nodes.Add("Subject: " + message.Subject);
+            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+            doc.LoadHtml(message.BodyHtml);
+            var bodyNodeHtml = doc.DocumentNode.SelectSingleNode("//body");
             TreeNode bodyNode = rootNode.Nodes.Add("Body: " + GetShortMessage(message.BodyText));
-            bodyNode.Tag = new string[] { message.BodyText, message.BodyRtf };
+            bodyNode.Tag = new string[] { bodyNodeHtml != null ? bodyNodeHtml.InnerHtml : message.BodyText, message.BodyRtf };
             rootNode.Tag = message.BodyText;
 
             TreeNode dateNode = rootNode.Nodes.Add("Received On: " + message.ReceivedOn);
