@@ -49,6 +49,8 @@ namespace OutlookMessageConverter
             }
             else // Some Emails from outlook have been dragged to application
             {
+                CheckTreeMessages();
+                
                 new Thread(new ThreadStart(delegate ()
                 {
                     //wrap standard IDataObject in OutlookDataObject
@@ -57,7 +59,6 @@ namespace OutlookMessageConverter
                     //get the names and data streams of the files dropped
                     string[] filenames = (string[])dataObject.GetData("FileGroupDescriptor");
                     MemoryStream[] filestreams = (MemoryStream[])dataObject.GetData("FileContents");
-                    CheckTreeMessages();
 
                     for (int fileIndex = 0; fileIndex < filenames.Length; fileIndex++)
                     {
@@ -280,56 +281,67 @@ namespace OutlookMessageConverter
 
         private void LoadMsgToTree(MsgReader.Outlook.Storage.Message message, TreeNode rootNode)
         {
-            rootNode.Text = message.Subject;
-            rootNode.Nodes.Add("Subject: " + message.Subject);
-            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-            doc.LoadHtml(message.BodyHtml);
-            var bodyNodeHtml = doc.DocumentNode.SelectSingleNode("//body");
-            TreeNode bodyNode = rootNode.Nodes.Add("Body: " + GetShortMessage(message.BodyText));
-            bodyNode.Tag = new string[] { bodyNodeHtml != null ? bodyNodeHtml.InnerHtml : message.BodyText, message.BodyRtf };
-            rootNode.Tag = message.BodyText;
-
-            TreeNode dateNode = rootNode.Nodes.Add("Received On: " + message.ReceivedOn);
-            dateNode.Tag = message.ReceivedOn;
-            dateNode.Name = "ReceivedOn";
-
-            if (!string.IsNullOrEmpty(message.Sender.DisplayName) || !string.IsNullOrEmpty(message.Sender.Email))
+            try
             {
-                string fromText = message.Sender.DisplayName + "<" + message.Sender.Email + ">";
-                TreeNode fromNode = rootNode.Nodes.Add("From: " + fromText);
-                fromNode.Tag = fromText;
-                fromNode.Name = "fromNode";
-            }
-
-            if (message.Recipients.Count > 1)
-            {
-                TreeNode recipientNode = rootNode.Nodes.Add("Recipients: " + message.Recipients.Count);
-                foreach (MsgReader.Outlook.Storage.Recipient recipient in message.Recipients)
+                rootNode.Text = message.Subject;
+                rootNode.Nodes.Add("Subject: " + message.Subject);
+                HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+                try
                 {
-                    recipientNode.Nodes.Add(recipient.Type + ": " + recipient.Email);
+                    doc.LoadHtml(message.BodyHtml);
                 }
-            }
-            else if (message.Recipients.Count > 0)
-            {
-                TreeNode recipientNode = rootNode.Nodes.Add("Recipient: " + message.Recipients.First().Email);
-            }
+                catch { }
+                var bodyNodeHtml = doc.DocumentNode.SelectSingleNode("//body");
+                TreeNode bodyNode = rootNode.Nodes.Add("Body: " + GetShortMessage(message.BodyText));
+                bodyNode.Tag = new string[] { bodyNodeHtml != null ? bodyNodeHtml.InnerHtml : message.BodyText, message.BodyRtf };
+                rootNode.Tag = message.BodyText;
 
-            if (message.Attachments.Count > 0)
-            {
-                TreeNode attachmentNode = rootNode.Nodes.Add("Attachments: " + message.Attachments.Count);
-                foreach (MsgReader.Outlook.Storage.Attachment.Attachment attachment in message.Attachments)
+                TreeNode dateNode = rootNode.Nodes.Add("Received On: " + message.ReceivedOn);
+                dateNode.Tag = message.ReceivedOn;
+                dateNode.Name = "ReceivedOn";
+
+                if (!string.IsNullOrEmpty(message.Sender.DisplayName) || !string.IsNullOrEmpty(message.Sender.Email))
                 {
-                    attachmentNode.Nodes.Add(attachment.FileName + ": " + attachment.Data.Length + "b");
+                    string fromText = message.Sender.DisplayName + "<" + message.Sender.Email + ">";
+                    TreeNode fromNode = rootNode.Nodes.Add("From: " + fromText);
+                    fromNode.Tag = fromText;
+                    fromNode.Name = "fromNode";
                 }
-            }
 
-            if (MessagesTreeView.Nodes.Count > 0 &&
-                !UpButton.Enabled &&
-                !DownButton.Enabled)
-            {
-                ChangeUpDownButtonsEnable(true);
+                if (message.Recipients.Count > 1)
+                {
+                    TreeNode recipientNode = rootNode.Nodes.Add("Recipients: " + message.Recipients.Count);
+                    foreach (MsgReader.Outlook.Storage.Recipient recipient in message.Recipients)
+                    {
+                        recipientNode.Nodes.Add(recipient.Type + ": " + recipient.Email);
+                    }
+                }
+                else if (message.Recipients.Count > 0)
+                {
+                    TreeNode recipientNode = rootNode.Nodes.Add("Recipient: " + message.Recipients.First().Email);
+                }
+
+                if (message.Attachments.Count > 0)
+                {
+                    TreeNode attachmentNode = rootNode.Nodes.Add("Attachments: " + message.Attachments.Count);
+                    foreach (MsgReader.Outlook.Storage.Attachment.Attachment attachment in message.Attachments)
+                    {
+                        attachmentNode.Nodes.Add(attachment.FileName + ": " + attachment.Data.Length + "b");
+                    }
+                }
+
+                if (MessagesTreeView.Nodes.Count > 0 &&
+                    !UpButton.Enabled &&
+                    !DownButton.Enabled)
+                {
+                    ChangeUpDownButtonsEnable(true);
+                }
+                rootNode.Expand();
             }
-            rootNode.Expand();
+            catch(Exception exp)
+            {
+                MessageBox.Show(exp.Message);
+            }
         }
 
         private void ChangeUpDownButtonsEnable(bool enabled)
