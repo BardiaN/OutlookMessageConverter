@@ -27,7 +27,10 @@ namespace OutlookMessageConverter
             this.TopMost = ConfigurationHelper.AlwaysOnTop;
             alwaysOnTopToolStripMenuItem.Checked = this.TopMost;
             showDeleteConfirmToolStripMenuItem.Checked = ConfigurationHelper.ConfirmDelete;
-            if(ConfigurationHelper.ShowHintOnLoad)
+            askEveryTimeToolStripMenuItem.Checked = ConfigurationHelper.TreeNodeOverride == TreeNodeOverrideEnum.AskEveryTime;
+            appendMessagesToolStripMenuItem.Checked = ConfigurationHelper.TreeNodeOverride == TreeNodeOverrideEnum.Append;
+            overwriteMessagesToolStripMenuItem.Checked = ConfigurationHelper.TreeNodeOverride == TreeNodeOverrideEnum.Overwrite;
+            if (ConfigurationHelper.ShowHintOnLoad)
             {
                 ShowHelp();
             }
@@ -52,6 +55,7 @@ namespace OutlookMessageConverter
                 //get the names and data streams of the files dropped
                 string[] filenames = (string[])dataObject.GetData("FileGroupDescriptor");
                 MemoryStream[] filestreams = (MemoryStream[])dataObject.GetData("FileContents");
+                CheckTreeMessages();
 
                 for (int fileIndex = 0; fileIndex < filenames.Length; fileIndex++)
                 {
@@ -211,8 +215,33 @@ namespace OutlookMessageConverter
                 OutlookStorage.Message message = new OutlookStorage.Message(messageStream);
                 messageStream.Close();
 
+                CheckTreeMessages();
                 this.LoadMsgToTree(message, this.MessagesTreeView.Nodes.Add("root"));
                 message.Dispose();
+            }
+        }
+
+        private void CheckTreeMessages()
+        {
+            if (MessagesTreeView.Nodes.Count > 0)
+            {
+                bool deleteNodes = false;
+
+                if (ConfigurationHelper.TreeNodeOverride == TreeNodeOverrideEnum.AskEveryTime)
+                {
+                    this.TopMost = false;
+                    deleteNodes = MessageBox.Show("Do you want to clear tree messages first?", "Adding new messages confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes;
+                    this.TopMost = ConfigurationHelper.AlwaysOnTop;
+                }
+                else if (ConfigurationHelper.TreeNodeOverride == TreeNodeOverrideEnum.Overwrite)
+                {
+                    deleteNodes = true;
+                }
+
+                if (deleteNodes)
+                {
+                    MessagesTreeView.Nodes.Clear();
+                }
             }
         }
 
@@ -256,6 +285,7 @@ namespace OutlookMessageConverter
             if (message.Messages.Count > 0)
             {
                 TreeNode subMessageNode = rootNode.Nodes.Add("Sub Messages: " + message.Messages.Count);
+                CheckTreeMessages();
                 foreach (OutlookStorage.Message subMessage in message.Messages)
                 {
                     this.LoadMsgToTree(subMessage, subMessageNode.Nodes.Add("MSG"));
@@ -324,8 +354,17 @@ namespace OutlookMessageConverter
             }
         }
 
+
         #endregion
 
+        private void TreeNodeOverride_click(object sender, EventArgs e)
+        {
+            ConfigurationHelper.TreeNodeOverride = (TreeNodeOverrideEnum)(short.Parse((sender as ToolStripMenuItem).Tag.ToString()));
+            askEveryTimeToolStripMenuItem.Checked = false;
+            overwriteMessagesToolStripMenuItem.Checked = false;
+            appendMessagesToolStripMenuItem.Checked = false;
+            (sender as ToolStripMenuItem).Checked = true;
 
+        }
     }
 }

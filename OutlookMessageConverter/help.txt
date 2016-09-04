@@ -14,3 +14,7 @@ Or
 * There are some tweaks to make your experience better:
 - Always on top: It could help keep your application on top of every other window, so you can easily drag and drop your messages from Outlook
 - Show confirm on delete: If you need a confirmation before deleting every tree node, you can set this on. (helps to prevent deleting by mistake)
+- Adding messages when tree is not empty: When your tree has already some messages and you drag some new messages, you have 3 options:
+	- Ask you everytime
+	- Append new messages
+	- Overwrite messages

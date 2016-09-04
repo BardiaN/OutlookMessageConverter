@@ -58,5 +58,17 @@ namespace OutlookMessageConverter.Properties {
                 this["ShowHintOnLoad"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public short TreeNodeOverride {
+            get {
+                return ((short)(this["TreeNodeOverride"]));
+            }
+            set {
+                this["TreeNodeOverride"] = value;
+            }
+        }
     }
 }

@@ -41,13 +41,17 @@
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.alwaysOnTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showDeleteConfirmToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addingMessagesWhenTreeIsNotEmptyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.askEveryTimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.appendMessagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.overwriteMessagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.treeViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.expandAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.collapseAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteNodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialogMessages = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialogExport = new System.Windows.Forms.SaveFileDialog();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainTableLayoutPanel.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.mainMenu.SuspendLayout();
@@ -182,7 +186,8 @@
             // 
             this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.alwaysOnTopToolStripMenuItem,
-            this.showDeleteConfirmToolStripMenuItem});
+            this.showDeleteConfirmToolStripMenuItem,
+            this.addingMessagesWhenTreeIsNotEmptyToolStripMenuItem});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.settingsToolStripMenuItem.Text = "&Settings";
@@ -190,16 +195,52 @@
             // alwaysOnTopToolStripMenuItem
             // 
             this.alwaysOnTopToolStripMenuItem.Name = "alwaysOnTopToolStripMenuItem";
-            this.alwaysOnTopToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.alwaysOnTopToolStripMenuItem.Size = new System.Drawing.Size(291, 22);
             this.alwaysOnTopToolStripMenuItem.Text = "&Always On Top";
             this.alwaysOnTopToolStripMenuItem.Click += new System.EventHandler(this.alwaysOnTopToolStripMenuItem_Click);
             // 
             // showDeleteConfirmToolStripMenuItem
             // 
             this.showDeleteConfirmToolStripMenuItem.Name = "showDeleteConfirmToolStripMenuItem";
-            this.showDeleteConfirmToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.showDeleteConfirmToolStripMenuItem.Size = new System.Drawing.Size(291, 22);
             this.showDeleteConfirmToolStripMenuItem.Text = "Show delete confirm";
             this.showDeleteConfirmToolStripMenuItem.Click += new System.EventHandler(this.showDeleteConfirmToolStripMenuItem_Click);
+            // 
+            // addingMessagesWhenTreeIsNotEmptyToolStripMenuItem
+            // 
+            this.addingMessagesWhenTreeIsNotEmptyToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.askEveryTimeToolStripMenuItem,
+            this.appendMessagesToolStripMenuItem,
+            this.overwriteMessagesToolStripMenuItem});
+            this.addingMessagesWhenTreeIsNotEmptyToolStripMenuItem.Name = "addingMessagesWhenTreeIsNotEmptyToolStripMenuItem";
+            this.addingMessagesWhenTreeIsNotEmptyToolStripMenuItem.Size = new System.Drawing.Size(291, 22);
+            this.addingMessagesWhenTreeIsNotEmptyToolStripMenuItem.Text = "Adding messages when tree is not empty";
+            // 
+            // askEveryTimeToolStripMenuItem
+            // 
+            this.askEveryTimeToolStripMenuItem.Checked = true;
+            this.askEveryTimeToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.askEveryTimeToolStripMenuItem.Name = "askEveryTimeToolStripMenuItem";
+            this.askEveryTimeToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.askEveryTimeToolStripMenuItem.Tag = "0";
+            this.askEveryTimeToolStripMenuItem.Text = "Ask every time";
+            this.askEveryTimeToolStripMenuItem.Click += new System.EventHandler(this.TreeNodeOverride_click);
+            // 
+            // appendMessagesToolStripMenuItem
+            // 
+            this.appendMessagesToolStripMenuItem.Name = "appendMessagesToolStripMenuItem";
+            this.appendMessagesToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.appendMessagesToolStripMenuItem.Tag = "1";
+            this.appendMessagesToolStripMenuItem.Text = "Append messages";
+            this.appendMessagesToolStripMenuItem.Click += new System.EventHandler(this.TreeNodeOverride_click);
+            // 
+            // overwriteMessagesToolStripMenuItem
+            // 
+            this.overwriteMessagesToolStripMenuItem.Name = "overwriteMessagesToolStripMenuItem";
+            this.overwriteMessagesToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.overwriteMessagesToolStripMenuItem.Tag = "2";
+            this.overwriteMessagesToolStripMenuItem.Text = "Overwrite messages";
+            this.overwriteMessagesToolStripMenuItem.Click += new System.EventHandler(this.TreeNodeOverride_click);
             // 
             // treeViewToolStripMenuItem
             // 
@@ -233,6 +274,14 @@
             this.deleteNodeToolStripMenuItem.Text = "Delete Node";
             this.deleteNodeToolStripMenuItem.Click += new System.EventHandler(this.deleteNodeToolStripMenuItem_Click);
             // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpToolStripMenuItem.Text = "&Help";
+            this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
+            // 
             // openFileDialogMessages
             // 
             this.openFileDialogMessages.AddExtension = false;
@@ -246,14 +295,6 @@
             this.saveFileDialogExport.FileName = "ExportedMessages.pdf";
             this.saveFileDialogExport.Filter = "Pdf Files|*.pdf";
             this.saveFileDialogExport.RestoreDirectory = true;
-            // 
-            // helpToolStripMenuItem
-            // 
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.helpToolStripMenuItem.Text = "&Help";
-            this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
             // 
             // FormMain
             // 
@@ -305,6 +346,10 @@
         private System.Windows.Forms.Button buttonExportPDF;
         private System.Windows.Forms.SaveFileDialog saveFileDialogExport;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addingMessagesWhenTreeIsNotEmptyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem askEveryTimeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem appendMessagesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem overwriteMessagesToolStripMenuItem;
     }
 }
 

@@ -48,5 +48,18 @@ namespace OutlookMessageConverter.InfraStructure
                 Settings.Default.Save();
             }
         }
+
+        public static TreeNodeOverrideEnum TreeNodeOverride
+        {
+            get
+            {
+                return (TreeNodeOverrideEnum)Settings.Default.TreeNodeOverride;
+            }
+            set
+            {
+                Settings.Default.TreeNodeOverride = (short)value;
+                Settings.Default.Save();
+            }
+        }
     }
 }
