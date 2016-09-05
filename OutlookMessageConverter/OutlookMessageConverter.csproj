@@ -27,7 +27,7 @@
     <ProductName>Outlook Message Converter</ProductName>
     <PublisherName>Simon Kirkland</PublisherName>
     <SuiteName>Simon Kirkland</SuiteName>
-    <ApplicationRevision>6</ApplicationRevision>
+    <ApplicationRevision>7</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
